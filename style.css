@@ -1,0 +1,83 @@
+.game-container {
+  width: clamp(300px,100vw,500px);
+  height: clamp(420px,100vh,700px);
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+}
+.sky {
+  width: 100%;
+  height: 600px;
+  position: absolute;
+  background-image: url(Assets/images/background-day.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: -280px;
+}
+.ground {
+  width: 100%;
+  height: 100px;
+  background-image: url(Assets/images/base.png);
+  position: absolute;
+  top: 600px;
+  z-index: +1;
+}
+.bird {
+  width: 50px;
+  height: 50px;
+  left: 150px;
+  background-image: url(Assets/images/yellowbird-upflap.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  background-clip: content-box;
+  position: absolute;
+}
+@keyframes birdAnimation {
+  0%,100%{
+    background-image: url(Assets/images/yellowbird-downflap.png);
+  }
+  33%{
+    background-image: url(Assets/images/yellowbird-midflap.png);
+  }
+  66%{
+    background-image: url(Assets/images/yellowbird-upflap.png);
+  }
+}
+.obsticle {
+  width: 80px;
+  height: 300px;
+  background-image: url(Assets/images/pipe-green.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  left: 500px;
+}
+.top-obsticle {
+  width: 80px;
+  height: 350px;
+  background-image: url(Assets/images/pipe-green.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: rotate(180deg);
+  position: absolute;
+  left: 500px;
+}
+.game-over {
+  background-image: url(Assets/images/gameover.png);
+  background-position: center center;
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  background-repeat: no-repeat;
+  display: none;
+  top: 60px;
+  left: 152px;
+  z-index: 99;
+}
+.score-board {
+  text-align: center;
+  position: relative;
+  z-index: 99;
+  padding: 1rem;
+}
