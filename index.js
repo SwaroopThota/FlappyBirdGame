@@ -2,17 +2,16 @@ const bird = document.querySelector(".bird");
 const gameDisplay = document.querySelector(".game-container");
 let birdBottom, score, isGameOver, gameTimer, obsticleTimer;
 const jump = (e) => {
-  if (e.key === " " && birdBottom <= 530) {
+  if ( (e.key === undefined || e.key === " ") && birdBottom <= 530) {
     birdBottom += 50;
     bird.style.bottom = birdBottom + "px";
     new Audio("Assets/Audio/audio_wing.wav").play();
   }
 };
 const restartGame = (e) => {
-  if (e.key === " ") {
+  if (e.key === undefined || e.key === " ") {
     let obsticles = document.getElementsByClassName("obsticle");
     let topObsticles = document.getElementsByClassName("top-obsticle");
-    console.log(obsticles,topObsticles);
     for(let i=0;i<obsticles.length;i++){
       gameDisplay.removeChild(obsticles[i]);
       gameDisplay.removeChild(topObsticles[i]);
@@ -20,12 +19,17 @@ const restartGame = (e) => {
     document.getElementById("tensDigit").setAttribute("src",`Assets/images/0.png`);
     document.getElementById("onesDigit").setAttribute("src",`Assets/images/0.png`);
     document.removeEventListener("keyup", restartGame);
+    document.removeEventListener("click", restartGame);
     startGame();
   }
 };
 const startGame = () => {
   bird.style.animation = "birdAnimation .5s linear infinite";
+  document.removeEventListener("keyup", startGameEvent);
+  document.removeEventListener("click", startGameEvent);
   document.addEventListener("keyup", jump);
+  document.addEventListener("click", jump);
+  document.getElementsByClassName("game-info")[0].style.display = "none";
   document.getElementsByClassName("game-over")[0].style.display = "none";
   birdBottom = 300;
   score = 0;
@@ -47,7 +51,7 @@ const generateObsticle = () => {
   topObsticle.classList.add("top-obsticle");
   gameDisplay.appendChild(topObsticle);
   let obsticleLeft = 500;
-  let obsticleBottom = Math.random() * 5 * 20;
+  let obsticleBottom = Math.random() * 4 * 20;
   obsticle.style.bottom = obsticleBottom + "px";
   topObsticle.style.bottom = 430 + obsticleBottom + "px";
   const moveObsticle = () => {
@@ -88,9 +92,11 @@ const gameOver = () => {
   clearInterval(gameTimer);
   clearInterval(obsticleTimer);
   document.removeEventListener("keyup", jump);
+  document.removeEventListener("click", jump);
   document.getElementsByClassName("game-over")[0].style.display = "block";
+  document.getElementsByClassName("game-info")[0].style.display = "block";
   console.log(score);
-  setTimeout(() => { document.addEventListener("keyup", restartGame);},1000);
+  setTimeout(() => { document.addEventListener("keyup", restartGame); document.addEventListener("click", restartGame);},1000);
 };
 
 const displayScore = (score) => {
@@ -100,4 +106,9 @@ const displayScore = (score) => {
   }
   document.getElementById("onesDigit").setAttribute("src",`Assets/images/${score%10}.png`);
 };
-startGame();
+const startGameEvent = (e)=>{
+  if(e.key === ' ' || e.target.className === 'sky') 
+  startGame();
+};
+document.addEventListener("keyup", startGameEvent);
+document.addEventListener("click", startGameEvent);
