@@ -5,22 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flappy Bird</title>
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="Assets/Favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="Assets/Favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="Assets/Favicon/favicon-16x16.png">
+    <link rel="manifest" href="Assets/Favicon/site.webmanifest">
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script defer src="index.js"></script>
 </head>
 <body>
-    <div class="game-container">
-        <div class="sky">
-            <div class="score-board">
-                <img src="Assets/images/0.png" alt="" id="tensDigit">
-                <img src="Assets/images/0.png" alt="" id="onesDigit">
+    <div class="container">
+        <div class="game-container">
+            <div class="sky">
+                <div class="score-board">
+                    <img src="Assets/images/0.png" alt="" id="tensDigit">
+                    <img src="Assets/images/0.png" alt="" id="onesDigit">
+                </div>
+                <div class="game-info"></div>
+                <div class="game-over"></div>
+                <div class="bird"></div>
             </div>
-            <div class="game-info"></div>
-            <div class="game-over"></div>
-            <div class="bird"></div>
+            <div class="ground"></div>
         </div>
-        <div class="ground"></div>
     </div>
 </body>
 </html>
