@@ -2,14 +2,14 @@ const bird = document.querySelector(".bird");
 const gameDisplay = document.querySelector(".game-container");
 let birdBottom, score, isGameOver, gameTimer, obsticleTimer;
 const jump = (e) => {
-  if ( (e.key === undefined || e.key === " ") && birdBottom <= 530) {
+  if (e.key === " " && birdBottom <= 530) {
     birdBottom += 50;
     bird.style.bottom = birdBottom + "px";
     new Audio("Assets/Audio/audio_wing.wav").play();
   }
 };
 const restartGame = (e) => {
-  if (e.key === undefined || e.key === " ") {
+  if (e.key === " ") {
     document.removeEventListener("keyup", restartGame);
     document.removeEventListener("click", restartGame);
     startGame();
@@ -18,11 +18,10 @@ const restartGame = (e) => {
 const startGame = () => {
   bird.style.animation = "birdAnimation .5s linear infinite";
   document.removeEventListener("keyup", startGameEvent);
-  document.removeEventListener("click", startGameEvent);
   document.addEventListener("keyup", jump);
   document.addEventListener("click", jump);
   document.getElementsByClassName("game-info")[0].style.display = "none";
-  birdBottom = 300;
+  birdBottom = 350;
   score = 0;
   isGameOver = false; 
   gameTimer = setInterval(birdGravity, 15);
@@ -42,7 +41,7 @@ const generateObsticle = () => {
   topObsticle.classList.add("top-obsticle");
   gameDisplay.appendChild(topObsticle);
   let obsticleLeft = 500;
-  let obsticleBottom = Math.random() * 4 * 20;
+  let obsticleBottom = Math.random() * 50;
   obsticle.style.bottom = obsticleBottom + "px";
   topObsticle.style.bottom = 430 + obsticleBottom + "px";
   const moveObsticle = () => {
@@ -56,11 +55,11 @@ const generateObsticle = () => {
     }
     if (
       isGameOver ||
-      (obsticleLeft < 200 && obsticleLeft > 70 && (birdBottom < obsticleBottom + 190 || birdBottom > obsticleBottom + 280))
+      (obsticleLeft < 200 && obsticleLeft > 70 && (birdBottom < obsticleBottom + 290 || birdBottom > obsticleBottom + 385))
     ) {
       clearInterval(obsticleMovementTimer);
       if(isGameOver){
-        gameDisplay.removeChild(obsticle);
+          gameDisplay.removeChild(obsticle);
          gameDisplay.removeChild(topObsticle);
         }
       if (!isGameOver) gameOver();
@@ -81,12 +80,10 @@ const gameOver = () => {
   clearInterval(gameTimer);
   clearInterval(obsticleTimer);
   document.removeEventListener("keyup", jump);
-  document.removeEventListener("click", jump);
   document.getElementsByClassName("game-over")[0].style.display = "block";
   setTimeout(() => { 
-    document.addEventListener("keyup", restartGame); 
-    document.addEventListener("click", restartGame);
-    bird.style.bottom = '250px';
+    document.addEventListener("keyup", restartGame);
+    bird.style.bottom = '350px';
     let obsticles = document.getElementsByClassName("obsticle");
     let topObsticles = document.getElementsByClassName("top-obsticle");
     gameDisplay.removeChild(obsticles[0]);
@@ -95,7 +92,7 @@ const gameOver = () => {
     document.getElementsByClassName("game-info")[0].style.display = "block";
     document.getElementById("tensDigit").setAttribute("src",`Assets/images/0.png`);
     document.getElementById("onesDigit").setAttribute("src",`Assets/images/0.png`);
-  },1200);
+  },1000);
 };
 
 const displayScore = (score) => {
@@ -104,8 +101,8 @@ const displayScore = (score) => {
   document.getElementById("onesDigit").setAttribute("src",`Assets/images/${score%10}.png`);
 };
 const startGameEvent = (e)=>{
-  if(e.key === undefined || e.key === ' ') 
+  if(e.key === ' ') 
   startGame();
 };
 document.addEventListener("keyup", startGameEvent);
-document.addEventListener("click", startGameEvent);
+document.addEventListener("click", () => { document.dispatchEvent(new KeyboardEvent("keyup", { key: " " })) });
