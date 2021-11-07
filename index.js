@@ -1,6 +1,10 @@
 const bird = document.querySelector(".bird");
 const gameDisplay = document.querySelector(".game-container");
-let birdBottom, score, isGameOver, gameTimer, obsticleTimer;
+let birdBottom, score, highScore=0, isGameOver, gameTimer, obsticleTimer;
+if(localStorage.getItem('HS') === null){
+  localStorage.setItem('HS',highScore);
+}
+highScore = localStorage.getItem('HS');
 const jump = (e) => {
   if (e.key === " " && birdBottom <= 530) {
     birdBottom += 50;
@@ -24,8 +28,8 @@ const startGame = () => {
   birdBottom = 350;
   score = 0;
   isGameOver = false; 
-  gameTimer = setInterval(birdGravity, 15);
-  obsticleTimer = setInterval(generateObsticle, 1000);
+  gameTimer = setInterval(birdGravity, 14);
+  obsticleTimer = setInterval(generateObsticle, 800);
 };
 const birdGravity = () => {
   birdBottom -= 2;
@@ -41,7 +45,7 @@ const generateObsticle = () => {
   topObsticle.classList.add("top-obsticle");
   gameDisplay.appendChild(topObsticle);
   let obsticleLeft = 500;
-  let obsticleBottom = Math.random() * 50;
+  let obsticleBottom = Math.random() * 70;
   obsticle.style.bottom = obsticleBottom + "px";
   topObsticle.style.bottom = 430 + obsticleBottom + "px";
   const moveObsticle = () => {
@@ -60,7 +64,7 @@ const generateObsticle = () => {
       clearInterval(obsticleMovementTimer);
       if(isGameOver){
           gameDisplay.removeChild(obsticle);
-         gameDisplay.removeChild(topObsticle);
+          gameDisplay.removeChild(topObsticle);
         }
       if (!isGameOver) gameOver();
     }
@@ -70,10 +74,11 @@ const generateObsticle = () => {
       displayScore(score);
     }
   };
-  const obsticleMovementTimer = setInterval(moveObsticle, 10);
+  const obsticleMovementTimer = setInterval(moveObsticle, 14);
 };
 
 const gameOver = () => {
+  localStorage.setItem('HS',highScore);
   bird.style.animation = "";
   isGameOver = true;
   new Audio("Assets/Audio/audio_hit.wav").play();
@@ -96,9 +101,15 @@ const gameOver = () => {
 };
 
 const displayScore = (score) => {
+  highScore = Math.max(highScore,score);
+  // High score
+  document.getElementById("hSOnesDigit").setAttribute("src",`Assets/images/${highScore%10}.png`);
+  if(highScore>=10)
+  document.getElementById("hSTensDigit").setAttribute("src",`Assets/images/${Math.floor(highScore/10)}.png`);
+  // normal score
+  document.getElementById("onesDigit").setAttribute("src",`Assets/images/${score%10}.png`);
   if(score>=10)
     document.getElementById("tensDigit").setAttribute("src",`Assets/images/${Math.floor(score/10)}.png`);
-  document.getElementById("onesDigit").setAttribute("src",`Assets/images/${score%10}.png`);
 };
 const startGameEvent = (e)=>{
   if(e.key === ' ') 
@@ -106,3 +117,4 @@ const startGameEvent = (e)=>{
 };
 document.addEventListener("keyup", startGameEvent);
 document.addEventListener("click", () => { document.dispatchEvent(new KeyboardEvent("keyup", { key: " " })) });
+displayScore(0);
